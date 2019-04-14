@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SuperDictionary">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="387dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="12dp"
+        android:text="Welcome to SuperDictionary!"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/word"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="99dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="99dp"
+        android:ems="10"
+        android:hint="Enter word here..."
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <Spinner
+        android:id="@+id/menu"
+        android:layout_width="156dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="127dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="128dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/word" />
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="162dp"
+        android:text="Go!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/menu" />
+
+    <TextView
+        android:id="@+id/resultsView"
+        android:layout_width="339dp"
+        android:layout_height="384dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="33dp"
+        android:scrollbars="vertical"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submitButton" />
+
+</android.support.constraint.ConstraintLayout>
