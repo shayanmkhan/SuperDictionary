@@ -10,4 +10,4 @@ Below is a diagram demonstrating the design of the application:
 ## How to Use
 This repository contains all original source code. The servlet was built using Netbeans IDE, and the Android app was built using Android Studio. To run either program, simply import into the respective IDE and run the project.
 
-The web service has been packaged into a Docker container and reployed to the cloud using Heroku for always-on service. Its web dashboard can be accessed at https://still-brook-30504.herokuapp.com/SuperDictionary/dashboard.
+The web service has been packaged into a Docker container and deployed to the cloud using Heroku for always-on service. Its web dashboard can be accessed at https://still-brook-30504.herokuapp.com/SuperDictionary/dashboard.
