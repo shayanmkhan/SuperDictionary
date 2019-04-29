@@ -1,8 +1,8 @@
-//Author: Shayan Khan
+// Author: Shayan Khan
 
-//Description: A RESTful web service which receives an dictionary request from a client, calls a dictionary API,
-//and responds with a JSON string with the requested information. Also logs interactions in a database, performs 
-//analytics on that data, and displays the results in a web dashboard
+// Description: A RESTful web service which receives an dictionary request from a client, calls a dictionary API,
+// and responds with a JSON string with the requested information. Also logs interactions in a database, performs 
+// analytics on that data, and displays the results in a web dashboard
 
 package edu.cmu.superdictionary;
 
@@ -36,47 +36,47 @@ import org.bson.Document;
 public class SuperDictionary extends HttpServlet {
 
     @Override
-    //Handles the HTTP GET method
+    // Handles the HTTP GET method
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //Store request parameters
+        // Store request parameters
         String[] requestParameters = request.getPathInfo().substring(1).split("/");
 
-        //Execute if dashboard is requested
+        // Execute if dashboard is requested
         if(requestParameters[0].equals("dashboard")) {
-            //Connect to database
+            // Connect to database
             MongoCollection collection = connectToDB();
             
-            //Run analytics on database contents
+            // Run analytics on database contents
             String topWord = findTopWord(collection);
             String topOperation = findTopOperation(collection);   
             long avgResponseTime = calcAvgResponseTime(collection);
             String logs = getLogs(collection);
             
-            //Store results in request object
+            // Store results in request object
             request.setAttribute("topWord", topWord);
             request.setAttribute("topOperation", topOperation);
             request.setAttribute("avgResponseTime", avgResponseTime);
             request.setAttribute("logs", logs);
             
-            //Display results in JSP page
+            // Display results in JSP page
             RequestDispatcher dashboardView = request.getRequestDispatcher("/dashboard.jsp");
             dashboardView.forward(request, response);
         }   
 
-        //Execute if dictionary service is requested
+        // Execute if dictionary service is requested
         else if (requestParameters.length == 2) {
-            //Start timer
+            // Start timer
             long startTime = System.currentTimeMillis();
             
-            //Parse request
+            // Parse request
             String word = requestParameters[0].toLowerCase();
             String operation = requestParameters[1].toLowerCase();
 
-            //Retrieve data from web API using given parameters, and save as a JSON string
-            //Driver code taken from WordsAPI SDK
+            // Retrieve data from web API using given parameters, and save as a JSON string
+            // Driver code taken from WordsAPI SDK
             HttpResponse apiResponse = null;
-            String apiRequest = "https://wordsapiv1.p.rapidapi.com/words/" + word + "/" + operation;
+            String apiRequest = "https:// wordsapiv1.p.rapidapi.com/words/" + word + "/" + operation;
             try {
                 apiResponse = Unirest.get(apiRequest)
                         .header("X-RapidAPI-Key", "93eff8fef7msh7e7d4e83109205fp1b5f9djsn9e3712d5c883")
@@ -86,23 +86,23 @@ public class SuperDictionary extends HttpServlet {
             }
             String data = apiResponse.getBody().toString();
 
-            //Send fetched data to client
+            // Send fetched data to client
             response.setStatus(200);
             PrintWriter out = response.getWriter();
             out.print(data);
             
-            //End timer and save value
+            // End timer and save value
             Long responseTime = System.currentTimeMillis() - startTime;
             
-            //Log request and response info in database
+            // Log request and response info in database
             logInfo(request, apiRequest, response, responseTime);
         }
 
     }
     
-    //Stores the given information in a MongoDB database
+    // Stores the given information in a MongoDB database
     void logInfo(HttpServletRequest request, String apiRequest, HttpServletResponse response, Long responseTime) {
-        //Extract various information from parameters
+        // Extract various information from parameters
         String[] requestParams = request.getPathInfo().substring(1).split("/");
         String userInfo = request.getHeader("User-Agent");
         String requestWord = requestParams[0];
@@ -110,7 +110,7 @@ public class SuperDictionary extends HttpServlet {
         DateFormat df = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
         String timeOfRequest = df.format(new Date());
       
-        //Create map to represent data
+        // Create map to represent data
         Map<String,Object> logData = new LinkedHashMap<>();
         logData.put("Time of Request", timeOfRequest);
         logData.put("User Info", userInfo);
@@ -119,20 +119,20 @@ public class SuperDictionary extends HttpServlet {
         logData.put("API Request", apiRequest);
         logData.put("Response Time (ms)", responseTime);
         
-        //Connect to database
+        // Connect to database
         MongoCollection collection = connectToDB();
         
-        //Insert data into database
+        // Insert data into database
         Document databaseEntry = new Document(logData);
         collection.insertOne(databaseEntry);
     }
     
-    //Connects to MongoDB and returns a referenece to the Mongo Collection
-    //Driver code taken from MongoDB website
+    // Connects to MongoDB and returns a referenece to the Mongo Collection
+    // Driver code taken from MongoDB website
     MongoCollection connectToDB() {
         System.out.println("Connecting to database...");
         MongoClientURI uri = new MongoClientURI(
-                "mongodb://shayankhan:qweqwe@cluster0-shard-00-00-cb8fp.mongodb.net:27017,cluster0-shard-00-01-cb8fp.mongodb.net:27017,cluster0-shard-00-02-cb8fp.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true");
+                "mongodb:// shayankhan:qweqwe@cluster0-shard-00-00-cb8fp.mongodb.net:27017,cluster0-shard-00-01-cb8fp.mongodb.net:27017,cluster0-shard-00-02-cb8fp.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true");
         MongoClient mongoClient = new MongoClient(uri);
         MongoDatabase database = mongoClient.getDatabase("SuperDictionary");
         MongoCollection collection = database.getCollection("Usage Logs");
@@ -140,15 +140,15 @@ public class SuperDictionary extends HttpServlet {
         return collection;
     }
     
-    //Finds the most commonly requested word in the Mongo collection
+    // Finds the most commonly requested word in the Mongo collection
     String findTopWord(MongoCollection collection) {
-        //Setup
+        // Setup
         MongoIterable<Document> words = collection.find();
         Map<String, Integer> wordFreq = new HashMap<>();
         int maxFreq = 0;
         String topWord = "";
         
-        //Count the frequency of each word
+        // Count the frequency of each word
         for (Document d : words) {
             String word = d.getString("Requested Word");
             if(!wordFreq.containsKey(word)) {
@@ -159,14 +159,14 @@ public class SuperDictionary extends HttpServlet {
             }
         }
         
-        //Calculate the highest word frequency
+        // Calculate the highest word frequency
         for(Integer freq : wordFreq.values()) {
             if(freq > maxFreq) {
                 maxFreq = freq;
             }
         }
         
-        //Find the word corresponding to the highest frequency
+        // Find the word corresponding to the highest frequency
         for(String word : wordFreq.keySet()) {
             if(wordFreq.get(word) == maxFreq) {
                 topWord = word;
@@ -176,15 +176,15 @@ public class SuperDictionary extends HttpServlet {
         return topWord;
     }
 
-    //Finds the most commonly requested operation in the Mongo collection
+    // Finds the most commonly requested operation in the Mongo collection
     String findTopOperation(MongoCollection collection) {
-        //Setup
+        // Setup
         MongoIterable<Document> words = collection.find();
         Map<String, Integer> operationFreq = new HashMap<>();
         int maxFreq = 0;
         String topOperation = "";
         
-        //Count the frequency of each operation
+        // Count the frequency of each operation
         for (Document d : words) {
             String word = d.getString("Requested Operation");
             if(!operationFreq.containsKey(word)) {
@@ -195,14 +195,14 @@ public class SuperDictionary extends HttpServlet {
             }
         }
         
-        //Calculate the highest operation frequency
+        // Calculate the highest operation frequency
         for(Integer freq : operationFreq.values()) {
             if(freq > maxFreq) {
                 maxFreq = freq;
             }
         }
         
-        //Find the operation corresponding to the highest frequency
+        // Find the operation corresponding to the highest frequency
         for(String word : operationFreq.keySet()) {
             if(operationFreq.get(word) == maxFreq) {
                 topOperation = word;
@@ -212,31 +212,31 @@ public class SuperDictionary extends HttpServlet {
         return topOperation;
     }
     
-    //Calculates the average response time in the Mongo collection
+    // Calculates the average response time in the Mongo collection
     long calcAvgResponseTime(MongoCollection collection) {
-        //Setup
+        // Setup
         MongoIterable<Document> documents = collection.find();
         long sum = 0;
         int count = 0;
         
-        //Calculate number and sum of all response times
+        // Calculate number and sum of all response times
         for(Document doc : documents) {
             Long responseTime = doc.getLong("Response Time (ms)");
             sum += responseTime;
             count++;
         }
         
-        //Return average
+        // Return average
         return (sum / count);
     }
     
-    //Returns a string representation of all logs in Mongo collection
+    // Returns a string representation of all logs in Mongo collection
     String getLogs(MongoCollection collection) {
-        //Setup
+        // Setup
         MongoIterable<Document> documents = collection.find();
         StringBuilder sb = new StringBuilder();
         
-        //Append the contents of all logs
+        // Append the contents of all logs
         for(Document doc : documents) {
             for(String key : doc.keySet()) {
                 sb.append(key + ": " + doc.get(key) + "<br>"); 
