@@ -6,7 +6,7 @@ This project was an exercise in building distributed applications. The main comp
 3. A MongoDB database that stores usage information; this information is analyzed by the web service
 
 Below is a diagram demonstrating the design of the application:
-![alt text](https://i.imgur.com/vozYYOF.png)
+![alt text](https://imgur.com/H8k4TOO)
 ## How to Use
 This repository contains all original source code. The servlet was built using Netbeans IDE, and the Android app was built using Android Studio. To run either program, simply import into the respective IDE and run the project.
 
